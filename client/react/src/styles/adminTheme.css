@@ -1,0 +1,13 @@
+:root {
+  --primary: #0a3d62;   /* Bleu institutionnel */
+  --secondary: #3c6382;
+  --accent: #0abde3;
+  --border: #dcdcdc;
+}
+.section-title {
+  color: var(--primary);
+  font-weight: bold;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--primary);
+  margin-bottom: 15px;
+}

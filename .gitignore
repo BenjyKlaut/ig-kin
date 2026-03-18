@@ -1,0 +1,16 @@
+# Dépendances
+node_modules/
+node_modules/
+
+# Production / Build
+client/react/dist/
+
+# electron Production / Build
+dist/
+
+# Base de données et Logs
+backend/data.db
+*.log
+
+# Environnement
+.env

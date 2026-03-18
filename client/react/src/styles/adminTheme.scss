@@ -1,0 +1,7 @@
+// 1. Redefinir les couleurs en utilisant les variables sass du bootstrap
+@use "bootstrap/scss/bootstrap" with (
+  $primary: #0a3d62, /* Bleu institutionnel */
+  $secondary: #3c6382, /* Bleu secondaire */
+  $info: #0abde3, /* Bleu clair pour les accents */
+  $border-color: #dcdcdc /* Gris clair pour les bordures */
+);

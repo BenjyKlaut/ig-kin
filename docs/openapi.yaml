@@ -1,0 +1,175 @@
+openapi: 3.0.3
+info:
+  title: IG-PNC Reports API (prototype)
+  version: 0.1.0
+  description: Minimal OpenAPI for the IG-PNC prototype (login, reports, audit)
+servers:
+  - url: http://localhost:3001
+paths:
+  /auth/login:
+    post:
+      summary: Authenticate user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [matricule, password]
+              properties:
+                matricule:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        "400": { description: Bad Request }
+        "401": { description: Unauthorized }
+  /reports:
+    get:
+      summary: Search reports
+      parameters:
+        - in: query
+          name: district
+          schema:
+            type: string
+        - in: query
+          name: commune
+          schema:
+            type: string
+        - in: query
+          name: date_debut
+          schema:
+            type: string
+            format: date
+        - in: query
+          name: date_fin
+          schema:
+            type: string
+            format: date
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of reports
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ReportSummary"
+                  total:
+                    type: integer
+    post:
+      summary: Create a report
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReportCreate"
+      responses:
+        "200":
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+        "400": { description: Bad Request }
+        "401": { description: Unauthorized }
+  /reports/{id}:
+    get:
+      summary: Get report detail
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Report detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReportDetail"
+        "404": { description: Not found }
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ReportSummary:
+      type: object
+      properties:
+        id:
+          type: string
+        date_faits:
+          type: string
+          format: date
+        district:
+          type: string
+        commune:
+          type: string
+        resume:
+          type: string
+        author:
+          type: string
+    ReportCreate:
+      type: object
+      required: [district, commune, date_faits, contenu]
+      properties:
+        district:
+          type: string
+        commune:
+          type: string
+        quartier:
+          type: string
+        date_faits:
+          type: string
+          format: date
+        resume:
+          type: string
+        contenu:
+          type: string
+        type_ordre_public:
+          type: string
+        mesures_prises:
+          type: string
+        degats:
+          type: object
+    ReportDetail:
+      allOf:
+        - $ref: "#/components/schemas/ReportSummary"
+        - type: object
+          properties:
+            contenu:
+              type: string
+            mesures_prises:
+              type: string
+            degats:
+              type: object

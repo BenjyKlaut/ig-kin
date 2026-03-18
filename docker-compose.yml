@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: igpnc
+      POSTGRES_PASSWORD: igpnc_pass
+      POSTGRES_DB: igpnc
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./backend
+    restart: on-failure
+    environment:
+      - PORT=3001
+      - JWT_SECRET=change-me-in-prod
+      - DATABASE_URL=postgres://igpnc:igpnc_pass@db:5432/igpnc
+      - USE_PG=false # set to true after adapting backend to Postgres
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/usr/src/app
+
+volumes:
+  db_data:
