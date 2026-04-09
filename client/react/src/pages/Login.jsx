@@ -1,31 +1,29 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { loginRequest } from "../api/api";
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Container, Row, Col, Alert } from "react-bootstrap";
 
 export default function Login() {
-  const { setToken } = useAuth();
+  const { login } = useAuth();
   const [matricule, setMatricule] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
     try {
-      const response = await loginRequest(matricule, password);
-      if (response.data.token) {
-        setToken(response.data.token);
-        navigate("/home");
-      } else {
-        setError("Matricule ou mot de passe incorrect");
-      }
+      await login(matricule, password);
+      navigate("/home");
     } catch (err) {
-      setError("Erreur lors de la connexion");
+      setError("Matricule ou mot de passe incorrect");
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -56,8 +54,13 @@ export default function Login() {
               />
             </Form.Group>
 
-            <Button type="submit" variant="primary" className="w-100">
-              Se connecter
+            <Button
+              type="submit"
+              variant="primary"
+              className="w-100"
+              disabled={loading}
+            >
+              {loading ? "Connexion en cours..." : "Se connecter"}
             </Button>
           </Form>
         </Col>

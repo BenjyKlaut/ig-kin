@@ -20,8 +20,8 @@ import GlobalReport from "./pages/GlobalReport";
 import "./styles/adminTheme.css";
 
 function PrivateRoute({ children }) {
-  const { token } = useAuth();
-  return token ? children : <Navigate to="/login" />;
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? children : <Navigate to="/login" />;
 }
 
 export default function App() {
