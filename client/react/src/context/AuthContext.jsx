@@ -7,6 +7,15 @@ import React, {
 } from "react";
 import axios from "axios";
 
+// Configurer l'URL de base pour les requêtes API
+// En développement: remplace :5173 (Vite) par :3001 (Backend)
+// En production: utilise le même domaine
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  window.location.origin.replace(":5173", ":3001");
+
+axios.defaults.baseURL = API_BASE_URL;
+
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
