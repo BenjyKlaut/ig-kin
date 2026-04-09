@@ -8,7 +8,7 @@ import {
 
 import { AuthProvider, useAuth } from "./context/AuthContext";
 
-import Login from "./pages/login";
+import Login from "./pages/Login";
 import Home from "./pages/Home";
 import SearchReports from "./pages/SearchReport";
 import NewReport from "./pages/NewReport";
@@ -29,9 +29,9 @@ export default function App() {
     <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
           <Route
-            path="/"
+            path="/home"
             element={
               <PrivateRoute>
                 <Home />

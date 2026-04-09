@@ -19,7 +19,7 @@ export default function Login() {
       const response = await loginRequest(matricule, password);
       if (response.data.token) {
         setToken(response.data.token);
-        navigate("/");
+        navigate("/home");
       } else {
         setError("Matricule ou mot de passe incorrect");
       }
